@@ -1,12 +1,11 @@
 import { Component, signal } from '@angular/core';
+import { form, Field } from '@angular/forms/signals';
 import { bootstrapApplication } from '@angular/platform-browser';
 
 enum ProjectStatus {
-  START = 'start',
   ACTIVE = 'active',
   CLOSED = 'closed',
 }
-
 
 type ProjectFormModel = {
   name: string;
@@ -15,22 +14,42 @@ type ProjectFormModel = {
 
 @Component({
   selector: 'app-root',
+  imports: [Field],
   template: `
-    <h1>Hello from {{ name }}!</h1>
-    <a target="_blank" href="https://angular.dev/overview">
-      Learn more about Angular
-    </a>
+  <label for="name">Name</label>
+  <input
+  type="text"
+  [field]="projectForm.name"
+  id="name" />
+
+  <fieldset>
+    <input
+      type="radio"
+      [field]="projectForm.status"
+      [value]="projectStatusEnum.CLOSED"
+      id="btnradio2" />
+    <label
+      class="btn btn-outline-primary"
+      for="btnradio2">
+      {{ projectStatusEnum.CLOSED }}
+    </label>
+
+    <input
+      type="radio"
+      [field]="projectForm.status"
+      [value]="projectStatusEnum.ACTIVE"
+      id="btnradio3" />
+    <label
+      for="btnradio3">
+      {{ projectStatusEnum.ACTIVE }}
+    </label>
+</fieldset>
   `,
 })
 export class App {
-  readonly projectFormModel = signal<ProjectFormModel>({ name: '', status: ProjectStatus.START });
-
-  readonly projectForm = form(this.projectFormModel, schemaPath => {
-    required(schemaPath.name, { message: 'Obvezno polje.' });
-    maxLength(schemaPath.name, 255, { message: 'Največ 255 znakov.' });
-
-    required(schemaPath.status, { message: 'Obvezno polje.' });
-  });
+  readonly projectFormModel = signal<ProjectFormModel>({ name: '', status: ProjectStatus.CLOSED });
+  readonly projectForm = form(this.projectFormModel);
+  projectStatusEnum = ProjectStatus;
 }
 
 bootstrapApplication(App);
