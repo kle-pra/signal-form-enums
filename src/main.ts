@@ -47,7 +47,7 @@ type ProjectFormModel = {
   `,
 })
 export class App {
-  readonly projectFormModel = signal<ProjectFormModel>({ name: '', status: ProjectStatus.CLOSED });
+  readonly projectFormModel = signal<ProjectFormModel>({ name: 'test', status: ProjectStatus.CLOSED });
   readonly projectForm = form(this.projectFormModel);
   projectStatusEnum = ProjectStatus;
 }
